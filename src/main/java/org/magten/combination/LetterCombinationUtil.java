@@ -18,44 +18,40 @@ class LetterCombinationUtil {
             {"w", "x", "y", "z"}
     };
 
-    String combine(int[] digits) {
-        if (digits.length == 0) {
+    private List<String> result = new ArrayList<>();
+
+    String combine(int[] inputDigits) {
+        if (inputDigits == null || inputDigits.length == 0) {
             return "";
-        } else {
-            String[] result = new String[]{};
-            for (int digit : digits) {
-                result = combineArrays(result, combineByDigits(new String[]{}, String.valueOf(digit)));
-            }
-            StringBuilder output = new StringBuilder();
-            for (String s : result) {
-                output.append(s).append(" ");
-            }
-            return output.toString().trim();
         }
+
+        StringBuilder digits = new StringBuilder();
+        for (int digit : inputDigits) {
+            digits.append(digit);
+        }
+
+        combine(digits.toString(), 0, "");
+
+        StringBuilder output = new StringBuilder();
+        for (String s : result) {
+            output.append(s).append(" ");
+        }
+        return output.toString().trim();
     }
 
-    private String[] combineByDigits(String[] arr, String digits) {
-        if (digits.length() > 0) {
-            arr = combineArrays(arr, LETTER_MAPPING[Integer.parseInt(digits.substring(0, 1))]);
-            return combineByDigits(arr, digits.substring(1));
+    private void combine(String inputDigits, int currentIndex, String currentLetter) {
+        if (currentIndex == inputDigits.length()) {
+            result.add(currentLetter);
         } else {
-            return arr;
-        }
-    }
-
-    private String[] combineArrays(String[] arr1, String[] arr2) {
-        if (arr1.length > 0 && arr2.length > 0) {
-            List<String> result = new ArrayList<>();
-            for (String s1 : arr1) {
-                for (String s2 : arr2) {
-                    result.add(s1 + s2);
+            String position = inputDigits.substring(currentIndex, currentIndex + 1);
+            String[] letters = LETTER_MAPPING[Integer.parseInt(position)];
+            if (letters.length > 0) {
+                for (String letter : letters) {
+                    combine(inputDigits, currentIndex + 1, currentLetter + letter);
                 }
+            } else {
+                combine(inputDigits, currentIndex + 1, currentLetter);
             }
-            return result.toArray(new String[0]);
-        } else if (arr1.length > 0) {
-            return arr1;
-        } else {
-            return arr2;
         }
     }
 }
