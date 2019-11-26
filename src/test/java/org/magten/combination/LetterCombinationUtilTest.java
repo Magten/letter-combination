@@ -14,6 +14,11 @@ public class LetterCombinationUtilTest {
     }
 
     @Test
+    public void testNull() {
+        Assert.assertEquals("", combinator.combine(null));
+    }
+
+    @Test
     public void testSpecialNumberZero() {
         int[] input = {0};
         Assert.assertEquals("", combinator.combine(input));
